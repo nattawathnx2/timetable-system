@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Timetable</title>
+</head>
+<body>
+    <a href="dashboard.html">back</a>
+    <h2>Manage Users</h2>
+
+    <input type="text" id="username" placeholder="Username">
+    <input type="password" id="password" placeholder="Password">
+    <input type="text" id="role" placeholder="Role">
+    
+    <br><button id="addUsers">Add Users</button>
+    <br><button id="updateUsers">Update Users</button><br>
+    <br><button id="loadUsers">Load Users</button>
+    
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Users ID</th>
+                <th>Username</th>
+                <th>Role</th>
+                <th>Create At</th>
+                <th>Action</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+
+        <tbody id="output">
+
+        </tbody>
+    </table>
+    
+    <script src="js/auth-admin.js"></script>
+    <script src="js/user.js"></script>
+</body>
+</html>

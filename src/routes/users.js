@@ -99,25 +99,42 @@ router.put("/:id", async (req,res) => {
             role
         } = req.body;
 
-        if(!username || !password || !role){
-            return res.status(400).json({ error: "username, password and role are required"});
+        if(!username || !role){
+            return res.status(400).json({ error: "username and role are required" });
         }
-
-        const hashPassword = await bcrypt.hash(password ,10);
-        const result = await pool.query(
-            `
-            UPDATE users
-            SET username = $1, password_hash = $2, role = $3
-            WHERE user_id = $4
-            RETURNING *
-            `,
-            [
-                username,
-                hashPassword,
-                role,
-                req.params.id
-            ]
-        );
+        
+        let result;
+        if(!password){
+            result = await pool.query(
+                `
+                UPDATE users
+                SET username = $1, role = $2
+                WHERE user_id = $3
+                RETURNING *
+                `   ,
+                [
+                    username,
+                    role,
+                    req.params.id
+                ]
+            );
+        }else{
+            const hashPassword = await bcrypt.hash(password ,10);
+            result = await pool.query(
+                `
+                UPDATE users
+                SET username = $1, password_hash = $2, role = $3
+                WHERE user_id = $4
+                RETURNING *
+                `   ,
+                [
+                    username,
+                    hashPassword,
+                    role,
+                    req.params.id
+                ]
+            );
+        }
 
         if(result.rows.length === 0){
             return res.status(404).json({ error: "user not found" });
