@@ -1,0 +1,102 @@
+body {
+    min-height: 100vh;
+    color: #212529;
+    background-color: #f5f7fb !important;  
+}
+
+.container {
+    max-width: 1200px;
+}
+
+.container > div:first-child {
+    padding: 28px 32px;
+    background: #ffffff;
+    border: 1px solid #e9edf5;
+    border-radius: 16px;
+    box-shadow: 0 4px 18px rgba(25, 42, 70, 0.04);
+}
+
+.container h1 {
+    font-size: 1.9rem;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+}
+
+#welcomeMessage {
+    margin-top: 12px;
+    color: #526179;
+    font-weight: 500;
+}
+
+.row > div > a.card {
+    height: 100;
+    min-height: 110px;
+    display: flex;
+    justify-content: center;
+    border: 1px solid #e6eaf1;
+    border-radius: 14px;
+    background-color: #ffffff;
+    color: #27363b;
+    font-size: 1.05rem;
+    font-weight: 600;
+    box-shadow: 0 3px 12px rgba(25, 42, 70, 0.035);
+    transition: transform 0.2s ease,
+                box-shadow 0.2s ease,
+                border-color 0.2s ease;
+}
+
+.row > div > a.card:hover {
+    transform: translateY(-4px);
+    border-color: #b9c9f5;
+    box-shadow: 0 9px 24px rgba(25, 42, 70, 0.09);
+    color: #3159b8;
+}
+
+.row > div > a.card:focus-visible {
+    outline: 3px solid #9bb7ff;
+    outline-offset: 3px;
+}
+
+#logoutBtn {
+    padding: 10px 22px;
+    border-radius: 10px;
+    font-weight: 600;
+}
+
+@media (max-width: 576px) {
+    .container {
+        padding-top: 24px !important;
+        padding-bottom: 24px !important;
+    }
+
+    .container > div:first-child {
+        padding: 22px 20px;
+    }
+
+    .container h1 {
+        font-size: 1.55rem;
+    }
+
+    .row > div > a.card {
+        min-height: 82px;
+        font-size: 1rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .row > div > a.card {
+        transition: none;
+    }
+
+    .row > div > a.card:hover {
+        transform: none;
+    }
+}
+
+.card{
+    transition: 0.2s;
+}
+
+.card:hover{
+    transform: translateY(-3px);
+}

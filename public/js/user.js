@@ -8,14 +8,16 @@ button.addEventListener("click", async () => {
 async function loadUsers(){
     const response = await fetch("/users");
     const data = await response.json();
+    
     output.innerHTML = "";
     for(const user of data){
+        const createdAt = new Date(user.created_at).toLocaleString("th-TH");
         output.innerHTML += `
         <tr>
             <td>${user.user_id}</td>
             <td>${user.username}</td>
             <td>${user.role}</td>
-            <td>${user.created_at}</td>
+            <td>${createdAt}</td>
             <td>
                 <button class="delete-btn"
                 data-user-id="${user.user_id}"

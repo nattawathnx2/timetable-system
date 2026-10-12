@@ -4,13 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Timetable</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/index.css">
 </head>
 <body>
-    <h1>Login</h1>
-    <input type="text" id="username" placeholder="Username">
-    <input type="text" id="password" placeholder="Password">
-    <button id="loginBtn">Login</button>
-    <p id="message"></p>
+    <div class="login-card">
+        <div class="text-center mb-3"><i class="bi bi-calendar-week fs-1"></i></div>
+        <h1 class="text-center mb-1">Timetable</h1>
+        <p class="text-center text-secondary mb-4">Management System</p>
+        <div class="mb-3">
+            <label class="form-label">Username</label>
+            <input type="text" id="username" class="form-control" placeholder="Enter username">
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Password</label>
+            <input type="password" id="password" class="form-control" placeholder="Enter password">
+        </div>
+
+        <button id="loginBtn" class="btn btn-primary w-100">Login</button>
+        <p id="message" class="text-center text-danger mt-3"></p>
+    </div>
     <script src="js/login.js"></script>
 </body>
 </html>
