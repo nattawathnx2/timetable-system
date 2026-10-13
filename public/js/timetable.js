@@ -43,15 +43,16 @@ async function loadTimetable(){
     console.log(daySlots);
 
     let tableHtml = `
-        <table border="1">
-            <thead>
-                <tr>
-                    <th>Time</th>
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover align-middle text-center mb-0">
+                <thead>
+                    <tr>
+                        <th class="table-light">Time</th>
     `;
 
     for(const day of daySlots){
         tableHtml += `
-            <th>${day}</th>
+            <th class="table-light">${day}</th>
         `;
     }
 
@@ -92,8 +93,9 @@ async function loadTimetable(){
         `;
     }
     tableHtml += `
-            </tbody>
-        </table>
+                </tbody>
+            </table>
+        </div>
     `;
 
     output.innerHTML = tableHtml;
