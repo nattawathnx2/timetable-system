@@ -6,12 +6,44 @@ button.addEventListener("click", async () => {
 });
 
 async function loadTimetable(){
+    const user = JSON.parse(localStorage.getItem("user"));
     const teacherId = teacherSelect.value;
     const subjectId = subjectSelect.value;
     const roomId = roomSelect.value;
     const groupId = groupSelect.value;
+
+    if(user?.role === "teacher" && !teacherId){
+        output.innerHTML = "";
+        return;
+    }
+
+    if(user?.role === "student" && !groupId){
+        output.innerHTML = "";
+        return;
+    }
+
+    const params = new URLSearchParams();
+
+    if(user?.role === "admin"){
+        if(teacherId) params.set("teacher_id", teacherId);
+        if(subjectId) params.set("subject_id", subjectId);
+        if(roomId) params.set("room_id", roomId);
+        if(groupId) params.set("group_id", groupId);
+    } else if(user?.role === "teacher"){
+        params.set("teacher_id", teacherId);
+    } else if(user?.role === "student"){
+        params.set("group_id", groupId);
+    } else {
+        output.innerHTML = "";
+        return;
+    }
+
     console.log("Teacher ID =", teacherId);
-    const response = await fetch(`/schedules?teacher_id=${teacherId}&subject_id=${subjectId}&room_id=${roomId}&group_id=${groupId}`);
+    const response = await fetch(`/schedules?${params.toString()}`);
+    if(!response.ok){
+        output.innerHTML = "ไม่สามารถโหลดตารางเรียนได้";
+        return;
+    }
     const data = await response.json();
     const timeSlot = new Set();
     const daySlot = new Set();
@@ -160,6 +192,29 @@ async function loadGroupSelect(){
             </option>
         `;
     }
+}
+
+const user = JSON.parse(localStorage.getItem("user"));
+
+const filters = {
+    teacher: document.getElementById("teacherFilter"),
+    subject: document.getElementById("subjectFilter"),
+    room: document.getElementById("roomFilter"),
+    group: document.getElementById("groupFilter")
+};
+
+Object.values(filters).forEach(filter => {
+    filter.hidden = true;
+});
+
+if(user?.role === "admin"){
+    Object.values(filters).forEach(filter => {
+        filter.hidden = false;
+    });
+}else if(user?.role === "teacher"){
+    filters.teacher.hidden = false;
+}else if(user?.role === "student"){
+    filters.group.hidden = false;
 }
 
 loadTeacherSelect();

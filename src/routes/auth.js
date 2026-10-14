@@ -31,13 +31,33 @@ router.post("/login", async (req,res) => {
             });
         }
 
-        res.json({
-            message: "Login successful",
-            user: {
+        req.session.regenerate((err) => {
+            if(err){
+                console.error(err);
+                return res.status(500).json({ error: "Session Error" });
+            }
+
+            req.session.user = {
                 user_id: user.user_id,
                 username: user.username,
                 role: user.role
             }
+
+            req.session.save((err) => {
+                if(err){
+                    console.error(err);
+                    return res.status(500).json({ error: "Session Error" });
+                }
+
+                res.json({
+                    message: "Login successful",
+                    user: {
+                        user_id: user.user_id,
+                        username: user.username,
+                        role: user.role
+                    }
+                });
+            });
         });
     } catch (error) {
         console.error(error);

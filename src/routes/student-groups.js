@@ -1,8 +1,9 @@
 const express = require("express");
 const router = express.Router();
+const { requireAuth , requireAdmin } = require("../middleware/auth");
 const pool = require("../db/connection");
 
-router.get("/", async (req,res) => {
+router.get("/", requireAuth, async (req,res) => {
     try {
         const result = await pool.query(
             "SELECT * FROM student_groups ORDER BY group_id"
@@ -14,7 +15,7 @@ router.get("/", async (req,res) => {
     }
 });
 
-router.get("/:id", async (req,res) => {
+router.get("/:id", requireAuth, async (req,res) => {
     try {
         const result = await pool.query(
             "SELECT * FROM student_groups WHERE group_id = $1",[req.params.id]
@@ -31,7 +32,7 @@ router.get("/:id", async (req,res) => {
     }
 });
 
-router.post("/",async (req,res) => {
+router.post("/", requireAdmin, async (req,res) => {
     try {
         const {
             group_code,
@@ -65,7 +66,7 @@ router.post("/",async (req,res) => {
     }
 });
 
-router.put("/:id",async (req,res) => {
+router.put("/:id", requireAdmin, async (req,res) => {
     try {
         const {
             group_code,
@@ -105,7 +106,7 @@ router.put("/:id",async (req,res) => {
     }
 });
 
-router.delete("/:id", async (req,res) => {
+router.delete("/:id", requireAdmin, async (req,res) => {
     try {
         const result = await pool.query(
             `
