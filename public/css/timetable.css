@@ -1,0 +1,58 @@
+
+.timetable-table {
+    width: 100%;
+    table-layout: fixed;
+    min-width: 0;
+}
+
+.timetable-table th:first-child,
+.timetable-table td:first-child {
+    width: 75px;
+}
+
+.timetable-table th:not(:first-child),
+.timetable-table td:not(:first-child) {
+    width: auto;
+    padding: 4px 2px;
+    font-size: 11px;
+    overflow-wrap: anywhere;
+    vertical-align: middle;
+}
+
+.timetable-table th {
+    font-size: 11px;
+    padding: 4px 2px;
+}
+
+.timetable-table td {
+    height: 75px;
+}
+
+.timetable-card {
+    width: 100%;
+}
+.timetable-card .card-body {
+    padding: 1.5rem;
+}
+
+.timetable-card #output {
+    width: 100%;
+}
+
+
+.timetable-table td:has(strong) {
+    background-color: #e2f3e8;
+    border-color: #c6dfce;
+}
+
+.timetable-table td strong {
+    display: inline-block;
+    color: #245b3b;
+    font-size: 12px;
+    margin-bottom: 3px;
+}
+
+.timetable-table td small {
+    color: #466451;
+    font-size: 10px;
+}
