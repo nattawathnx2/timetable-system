@@ -5,8 +5,18 @@ if(!user){
 
 const logoutBtn = document.getElementById("logoutBtn");
 logoutBtn.addEventListener("click", async () => {
-    localStorage.removeItem("user");
-    window.location.href = "/index.html";
+    try {
+        const response = await fetch("/auth/logout", {
+            method: "POST",
+            credentials: "include"
+        });
+
+        localStorage.removeItem("user");
+        window.location.href = "/index.html";
+    } catch(error) {
+        console.error("Logout Failed:", error);
+        alert("ไม่สามารถติดต่อเซิร์ฟเวอร์ได้");
+    }
 });
 
 const currentUser = JSON.parse(user);

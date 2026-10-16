@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { requireAuth , requireAdmin } = require("../middleware/auth");
+const { requireAuth , requireAdmin , validateId } = require("../middleware/auth");
 const pool = require("../db/connection");
 
 router.get("/", requireAuth, async (req,res) => {
@@ -17,7 +17,7 @@ router.get("/", requireAuth, async (req,res) => {
     }
 });
 
-router.get("/:id", requireAuth, async (req,res) => {
+router.get("/:id", requireAuth, validateId, async (req,res) => {
     try {
         const result = await pool.query(
             "SELECT * FROM rooms WHERE room_id = $1", [req.params.id]
@@ -70,7 +70,7 @@ router.post("/", requireAdmin, async (req,res) => {
     }
 });
 
-router.put("/:id", requireAdmin, async (req,res) => {
+router.put("/:id", requireAdmin, validateId, async (req,res) => {
     try {
         const {
             room_code,
@@ -107,7 +107,7 @@ router.put("/:id", requireAdmin, async (req,res) => {
     }
 });
 
-router.delete("/:id", requireAdmin, async (req,res) => {
+router.delete("/:id", requireAdmin, validateId, async (req,res) => {
     try {
         const result = await pool.query(
             `

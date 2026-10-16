@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const pool = require("../db/connection");
-const { requireAuth , requireAdmin } = require("../middleware/auth");
+const { requireAuth , requireAdmin, validateId } = require("../middleware/auth");
 const bcrypt = require("bcrypt");
 
 router.get("/", requireAuth, async (req,res) => {
@@ -21,7 +21,7 @@ router.get("/", requireAuth, async (req,res) => {
     }
 });
 
-router.get("/:id", requireAuth, async (req,res) => {
+router.get("/:id", requireAuth, validateId, async (req,res) => {
     try {
         const result = await pool.query(
             `
@@ -73,7 +73,7 @@ router.post("/", requireAdmin, async (req,res) => {
     }
 });
 
-router.delete("/:id", requireAdmin, async (req,res) => {
+router.delete("/:id", requireAdmin, validateId, async (req,res) => {
     try {
         const result = await pool.query(
             `
@@ -92,7 +92,7 @@ router.delete("/:id", requireAdmin, async (req,res) => {
     }
 });
 
-router.put("/:id", requireAdmin, async (req,res) => {
+router.put("/:id", requireAdmin, validateId, async (req,res) => {
     try {
         const {
             username,

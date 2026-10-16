@@ -18,7 +18,20 @@ function requireAdmin(req,res,next) {
     next();
 }
 
+function validateId(req, res, next) {
+    const id = req.params.id;
+
+    if (!/^[1-9]\d*$/.test(id)) {
+        return res.status(400).json({
+            error: "Invalid ID"
+        });
+    }
+
+    next();
+}
+
 module.exports = {
     requireAuth,
-    requireAdmin
+    requireAdmin,
+    validateId
 };

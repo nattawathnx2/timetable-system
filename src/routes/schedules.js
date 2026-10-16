@@ -1,16 +1,30 @@
 const express = require("express");
 const router = express.Router();
-const { requireAuth , requireAdmin } = require("../middleware/auth");
+const { requireAuth , requireAdmin , validateId } = require("../middleware/auth");
 const pool = require("../db/connection");
 
 router.get("/", requireAuth, async (req,res) => {
     try {
-        const teacherId = req.query.teacher_id;
-        const subjectId = req.query.subject_id;
-        const roomId = req.query.room_id;
-        const groupId = req.query.group_id;
-        console.log(teacherId, subjectId, roomId, groupId);
+        const { teacher_id, subject_id, room_id, group_id } = req.query;
+        const filters = [
+            ["teacher_id", teacher_id],
+            ["subject_id", subject_id],
+            ["room_id", room_id],
+            ["group_id", group_id]
+        ];
         
+        for(const [name, value] of filters){
+            if (value !== undefined && !/^[1-9]\d*$/.test(value)) {
+                return res.status(400).json({
+                    error: `Invalid ${name}`
+                });
+            }
+        }
+        const teacherId = teacher_id;
+        const subjectId = subject_id;
+        const roomId = room_id;
+        const groupId = group_id;
+
         let sql = `
             SELECT 
                 s.schedule_id, s.day_of_week, s.start_time, s.end_time,
@@ -67,7 +81,7 @@ router.get("/", requireAuth, async (req,res) => {
     }
 });
 
-router.get("/:id", requireAuth, async (req,res) => {
+router.get("/:id", requireAuth, validateId, async (req,res) => {
     try {
         const result = await pool.query(
             `
@@ -100,7 +114,7 @@ router.get("/:id", requireAuth, async (req,res) => {
     }
 });
 
-router.delete("/:id", requireAdmin, async (req,res) => {
+router.delete("/:id", requireAdmin, validateId, async (req,res) => {
     try {
         const result = await pool.query(
             `
@@ -236,7 +250,7 @@ router.post("/", requireAdmin, async (req,res) => {
     }
 });
 
-router.put("/:id", requireAdmin, async (req,res) => {
+router.put("/:id", requireAdmin, validateId, async (req,res) => {
     try {
         const {
             day_of_week,

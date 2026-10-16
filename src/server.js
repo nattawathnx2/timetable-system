@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const session = require("express-session");
+require("dotenv").config();
 
 const teacherRoutes = require("./routes/teachers");
 const subjectRoutes = require("./routes/subjects");
@@ -12,7 +13,7 @@ const userRoutes = require("./routes/users");
 
 app.use(express.json());
 app.use(session({
-    secret: process.env.SESSION_SECRET || "dev-only-change-this-secret",
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     cookie: {
