@@ -1,30 +1,67 @@
 const user = localStorage.getItem("user");
 if(!user){
-    window.location.href = "/index.html";
-}
-
-const logoutBtn = document.getElementById("logoutBtn");
-logoutBtn.addEventListener("click", async () => {
+    window.location.replace("/index.html");
+} else {
+    let currentUser;
     try {
-        const response = await fetch("/auth/logout", {
-            method: "POST",
-            credentials: "include"
+        currentUser = JSON.parse(user);
+    } catch(error) {
+        localStorage.removeItem("user");
+        window.location.replace("/index.html");
+        throw error;
+    }
+
+    const logoutBtn = document.getElementById("logoutBtn");
+
+    if(logoutBtn){
+        logoutBtn.addEventListener("click", async () => {
+            try {
+                await fetch("/auth/logout", {
+                    method: "POST",
+                    credentials: "same-origin"
+                });
+            } catch(error) {
+                console.error("Logout Failed:", error);
+            } finally {
+                localStorage.removeItem("user");
+                window.location.replace("/index.html");
+            }
+        });
+    }
+    const welcomeMessage = document.getElementById("welcomeMessage");
+    if(welcomeMessage){
+        welcomeMessage.textContent = `Welcome ${currentUser.username}`;
+    }
+
+    async function checkAdminAccess(){
+        const adminMenus = document.querySelectorAll(".admin-only");
+
+        adminMenus.forEach(menu => {
+            menu.style.setProperty("display", "none", "important");
         });
 
-        localStorage.removeItem("user");
-        window.location.href = "/index.html";
-    } catch(error) {
-        console.error("Logout Failed:", error);
-        alert("ไม่สามารถติดต่อเซิร์ฟเวอร์ได้");
-    }
-});
+        try {
+            const response = await fetch("/users/auth/admin-check", {
+                method: "GET",
+                credentials: "same-origin"
+            });
 
-const currentUser = JSON.parse(user);
-if(currentUser.role !== "admin"){
-    const adminMenus = document.querySelectorAll(".admin-only");
-    adminMenus.forEach(menu => {
-        menu.style.display = "none";
-    });
+            if(!response.ok){
+                return;
+            }
+            const result = await response.json();
+            if(result.authorized === true){
+                adminMenus.forEach(menu => {
+                    menu.style.removeProperty("display");
+                });
+
+                if(welcomeMessage){
+                    welcomeMessage.textContent = `Welcome ${currentUser.username} (admin)`;
+                }
+            }
+        } catch(error) {
+            console.error("Admin permission check failed:", error);
+        }
+    }
+    checkAdminAccess();
 }
-const welcomeMessage = document.getElementById("welcomeMessage");
-welcomeMessage.textContent = `Welcome ${currentUser.username} (${currentUser.role})`;

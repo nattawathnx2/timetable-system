@@ -4,7 +4,11 @@ const pool = require("../db/connection");
 const { requireAuth , requireAdmin, validateId } = require("../middleware/auth");
 const bcrypt = require("bcrypt");
 
-router.get("/", requireAuth, async (req,res) => {
+router.get("/auth/admin-check", requireAuth, requireAdmin, (req,res) => {
+    res.json({ authorized: true });
+});
+
+router.get("/", requireAuth, requireAdmin, async (req,res) => {
     try {
         const result = await pool.query(
             `
@@ -21,7 +25,7 @@ router.get("/", requireAuth, async (req,res) => {
     }
 });
 
-router.get("/:id", requireAuth, validateId, async (req,res) => {
+router.get("/:id", requireAuth, requireAdmin,  validateId, async (req,res) => {
     try {
         const result = await pool.query(
             `
